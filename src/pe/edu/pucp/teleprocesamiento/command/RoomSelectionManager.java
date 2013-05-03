@@ -7,11 +7,14 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
+import javax.wireless.messaging.MessageConnection;
+import javax.wireless.messaging.MessageListener;
 import pe.edu.pucp.teleprocesamiento.PlaygroundApp;
 import pe.edu.pucp.teleprocesamiento.form.LivingRoomForm;
 import pe.edu.pucp.teleprocesamiento.form.RegularRoomForm;
 import pe.edu.pucp.teleprocesamiento.form.RoomCatalogForm;
 import pe.edu.pucp.teleprocesamiento.http.HttpManager;
+import pe.edu.pucp.teleprocesamiento.sms.SmsManager;
 
 /**
  *
@@ -19,7 +22,7 @@ import pe.edu.pucp.teleprocesamiento.http.HttpManager;
  *
  * @author m523
  */
-public class RoomSelectionManager implements CommandListener {
+public class RoomSelectionManager implements CommandListener, MessageListener {
 
     private static final int LIVINGROOM = 0;
     private static final int BEDROOM_1 = 1;
@@ -48,6 +51,7 @@ public class RoomSelectionManager implements CommandListener {
                 RoomSelectionManager.this);
         this.bathroomForm = new RegularRoomForm("Baño",
                 RoomSelectionManager.this);
+        SmsManager.startListening(this);
     }
 
     public void commandAction(Command command, Displayable displayable) {
@@ -116,5 +120,9 @@ public class RoomSelectionManager implements CommandListener {
                 break;
         }
         return roomForm;
+    }
+
+    public void notifyIncomingMessage(final MessageConnection connection) {
+        SmsManager.notifyIncomingMessage(connection, display);
     }
 }
