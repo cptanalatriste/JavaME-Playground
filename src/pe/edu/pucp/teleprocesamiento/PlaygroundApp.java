@@ -35,12 +35,6 @@ public class PlaygroundApp extends MIDlet implements CommandListener,
         initialize();
     }
 
-    public void pauseApp() {
-    }
-
-    public void destroyApp(boolean unconditional) {
-    }
-
     private void initialize() {
         Displayable initialScreen = null;
         try {
@@ -86,5 +80,12 @@ public class PlaygroundApp extends MIDlet implements CommandListener,
 
     public void notifyIncomingMessage(MessageConnection mc) {
         smsManager.notifyIncomingMessage(mc, Display.getDisplay(this));
+    }
+
+    public void pauseApp() {
+    }
+
+    public void destroyApp(boolean unconditional) {
+        smsManager.stopListening();
     }
 }
