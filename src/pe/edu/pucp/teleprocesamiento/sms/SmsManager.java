@@ -18,30 +18,22 @@ public class SmsManager {
 
     private static final String PORT = "1234";
 
-    public static void startListening(final Display display)
+    public static void startListening(final MessageListener listener)
             throws IOException {
         Thread clientThread = new Thread() {
             public void run() {
+                System.out.println("Starting startListening ...");
                 try {
-                    MessageConnection rx = (MessageConnection) Connector.open("sms://:" + PORT);
-                    Message msgRxSMS = rx.receive();
-
-                    while ((msgRxSMS != null)) {
-                        if (msgRxSMS instanceof TextMessage) {
-                            String mensajeRx = ((TextMessage) msgRxSMS).getPayloadText();
-                            System.out.println(mensajeRx);
-                            display.setCurrent(new Alert("Alerta!",
-                                    mensajeRx,
-                                    null, AlertType.ERROR));
-                        }
-                        msgRxSMS = rx.receive();
-                    }
+                    MessageConnection connection =
+                            (MessageConnection) Connector.open("sms://:" + PORT);
+                    connection.setMessageListener(listener);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
         };
         clientThread.start();
+
     }
 
     public static void notifyIncomingMessage(final MessageConnection connection,

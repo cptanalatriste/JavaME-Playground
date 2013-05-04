@@ -9,6 +9,8 @@ import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
 import javax.microedition.midlet.*;
+import javax.wireless.messaging.MessageConnection;
+import javax.wireless.messaging.MessageListener;
 import pe.edu.pucp.teleprocesamiento.command.RoomSelectionManager;
 import pe.edu.pucp.teleprocesamiento.form.InitialScreenForm;
 import pe.edu.pucp.teleprocesamiento.form.RoomCatalogForm;
@@ -19,44 +21,45 @@ import pe.edu.pucp.teleprocesamiento.sms.SmsManager;
  *
  * @author Carlos G. Gavidia
  */
-public class PlaygroundApp extends MIDlet implements CommandListener {
-
+public class PlaygroundApp extends MIDlet implements CommandListener,
+        MessageListener {
+    
     public static final String NEXT_SCREEN_COMMAND = "Siguiente";
     public static final String ROOM_SELECTED_COMMAND = "Configurar";
     public static final String BACK_COMMAND = "Regresar";
     public static final String TURN_ON_COMMAND = "Encender";
     public static final String TURN_OFF_COMMAND = "Apagar";
-
+    
     public void startApp() {
         initialize();
     }
-
+    
     public void pauseApp() {
     }
-
+    
     public void destroyApp(boolean unconditional) {
     }
-
+    
     private void initialize() {
         Displayable initialScreen = null;
         try {
             initialScreen = getInitialScreen();
-            SmsManager.startListening(Display.getDisplay(this));
+            SmsManager.startListening(this);
         } catch (Exception ex) {
             initialScreen = new Alert("Error", "Ha ocurrido un error inesperado",
                     null, AlertType.ERROR);
             ex.printStackTrace();
         }
         Display.getDisplay(this).setCurrent(initialScreen);
-
+        
     }
-
+    
     private Form getInitialScreen() throws Exception {
         Form initialScreenForm = new InitialScreenForm();
         initialScreenForm.setCommandListener(this);
         return initialScreenForm;
     }
-
+    
     private void showRoomCatalog() {
         RoomCatalogForm roomCatalogForm = new RoomCatalogForm();
         final Display display = Display.getDisplay(this);
@@ -70,11 +73,15 @@ public class PlaygroundApp extends MIDlet implements CommandListener {
         }
         display.setCurrent(roomCatalogForm);
     }
-
+    
     public void commandAction(Command command, Displayable displayable) {
         String commandLabel = command.getLabel();
         if (NEXT_SCREEN_COMMAND.equals(commandLabel)) {
             showRoomCatalog();
         }
+    }
+    
+    public void notifyIncomingMessage(MessageConnection mc) {
+        SmsManager.notifyIncomingMessage(mc, Display.getDisplay(this));
     }
 }
