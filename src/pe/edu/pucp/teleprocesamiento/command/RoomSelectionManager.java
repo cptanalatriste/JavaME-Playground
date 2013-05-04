@@ -51,7 +51,6 @@ public class RoomSelectionManager implements CommandListener, MessageListener {
                 RoomSelectionManager.this);
         this.bathroomForm = new RegularRoomForm("Baño",
                 RoomSelectionManager.this);
-        SmsManager.startListening(this);
     }
 
     public void commandAction(Command command, Displayable displayable) {

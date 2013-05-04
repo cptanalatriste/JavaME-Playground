@@ -16,24 +16,32 @@ import javax.wireless.messaging.TextMessage;
  */
 public class SmsManager {
 
-    private static final String PORT = "5000";
+    private static final String PORT = "1234";
 
-    public static void startListening(final MessageListener listener)
+    public static void startListening(final Display display)
             throws IOException {
         Thread clientThread = new Thread() {
             public void run() {
-                System.out.println("Starting startListening ...");
                 try {
-                    MessageConnection connection =
-                            (MessageConnection) Connector.open("sms://:" + PORT);
-                    connection.setMessageListener(listener);
+                    MessageConnection rx = (MessageConnection) Connector.open("sms://:" + PORT);
+                    Message msgRxSMS = rx.receive();
+
+                    while ((msgRxSMS != null)) {
+                        if (msgRxSMS instanceof TextMessage) {
+                            String mensajeRx = ((TextMessage) msgRxSMS).getPayloadText();
+                            System.out.println(mensajeRx);
+                            display.setCurrent(new Alert("Alerta!",
+                                    mensajeRx,
+                                    null, AlertType.ERROR));
+                        }
+                        msgRxSMS = rx.receive();
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
         };
         clientThread.start();
-
     }
 
     public static void notifyIncomingMessage(final MessageConnection connection,

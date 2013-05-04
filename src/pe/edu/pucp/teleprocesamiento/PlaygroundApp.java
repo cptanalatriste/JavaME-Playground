@@ -12,6 +12,7 @@ import javax.microedition.midlet.*;
 import pe.edu.pucp.teleprocesamiento.command.RoomSelectionManager;
 import pe.edu.pucp.teleprocesamiento.form.InitialScreenForm;
 import pe.edu.pucp.teleprocesamiento.form.RoomCatalogForm;
+import pe.edu.pucp.teleprocesamiento.sms.SmsManager;
 
 /**
  * MIDlet for the Java ME Application.
@@ -40,6 +41,7 @@ public class PlaygroundApp extends MIDlet implements CommandListener {
         Displayable initialScreen = null;
         try {
             initialScreen = getInitialScreen();
+            SmsManager.startListening(Display.getDisplay(this));
         } catch (Exception ex) {
             initialScreen = new Alert("Error", "Ha ocurrido un error inesperado",
                     null, AlertType.ERROR);
