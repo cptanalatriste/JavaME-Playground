@@ -30,14 +30,16 @@ public class RegularRoomForm extends Form {
 
     public final void turnOff() {
         this.deleteAll();
-        ImageItem imageItem = new ImageItem(null, lightbulbImageOff, ImageItem.LAYOUT_CENTER,
+        ImageItem imageItem = new ImageItem(null, lightbulbImageOff, 
+                ImageItem.LAYOUT_CENTER,
                 "lightOff");
         this.append(imageItem);
     }
 
     public final void turnOn() {
         this.deleteAll();
-        ImageItem imageItem = new ImageItem(null, lightbulbImageOn, ImageItem.LAYOUT_CENTER,
+        ImageItem imageItem = new ImageItem(null, lightbulbImageOn, 
+                ImageItem.LAYOUT_CENTER,
                 "lightOn");
         this.append(imageItem);
     }

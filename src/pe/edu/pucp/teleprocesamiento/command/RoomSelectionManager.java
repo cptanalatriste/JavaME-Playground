@@ -7,14 +7,11 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
-import javax.wireless.messaging.MessageConnection;
-import javax.wireless.messaging.MessageListener;
 import pe.edu.pucp.teleprocesamiento.PlaygroundApp;
 import pe.edu.pucp.teleprocesamiento.form.LivingRoomForm;
 import pe.edu.pucp.teleprocesamiento.form.RegularRoomForm;
 import pe.edu.pucp.teleprocesamiento.form.RoomCatalogForm;
 import pe.edu.pucp.teleprocesamiento.http.HttpManager;
-import pe.edu.pucp.teleprocesamiento.sms.SmsManager;
 
 /**
  *
@@ -22,7 +19,7 @@ import pe.edu.pucp.teleprocesamiento.sms.SmsManager;
  *
  * @author m523
  */
-public class RoomSelectionManager implements CommandListener, MessageListener {
+public class RoomSelectionManager implements CommandListener {
 
     private static final int LIVINGROOM = 0;
     private static final int BEDROOM_1 = 1;
@@ -36,6 +33,7 @@ public class RoomSelectionManager implements CommandListener, MessageListener {
     private RegularRoomForm bedroom2Form = null;
     private RegularRoomForm bedroom3Form = null;
     private RegularRoomForm bathroomForm = null;
+    private HttpManager httpManager = null;
 
     public RoomSelectionManager(RoomCatalogForm roomCatalogForm, Display display)
             throws IOException {
@@ -51,6 +49,7 @@ public class RoomSelectionManager implements CommandListener, MessageListener {
                 RoomSelectionManager.this);
         this.bathroomForm = new RegularRoomForm("Baño",
                 RoomSelectionManager.this);
+        httpManager = new HttpManager();
     }
 
     public void commandAction(Command command, Displayable displayable) {
@@ -78,7 +77,7 @@ public class RoomSelectionManager implements CommandListener, MessageListener {
                 getSelectedIndex();
         System.out.println("selectedRoom: " + selectedRoom);
         final RegularRoomForm roomForm = getRoomFromCode(selectedRoom);
-        HttpManager.turnOnTheLight(selectedRoom, roomForm);
+        httpManager.turnOnTheLight(selectedRoom, roomForm);
 
     }
 
@@ -87,7 +86,7 @@ public class RoomSelectionManager implements CommandListener, MessageListener {
                 getSelectedIndex();
         System.out.println("selectedRoom: " + selectedRoom);
         final RegularRoomForm roomForm = getRoomFromCode(selectedRoom);
-        HttpManager.turnOffTheLight(selectedRoom, roomForm);
+        httpManager.turnOffTheLight(selectedRoom, roomForm);
     }
 
     private void launchRoomScreen() throws IOException {
@@ -95,7 +94,7 @@ public class RoomSelectionManager implements CommandListener, MessageListener {
                 getSelectedIndex();
         System.out.println("selectedRoom: " + selectedRoom);
         final RegularRoomForm roomForm = getRoomFromCode(selectedRoom);
-        HttpManager.launchRoomScreen(selectedRoom, roomForm, display);
+        httpManager.launchRoomScreen(selectedRoom, roomForm, display);
 
     }
 
@@ -119,9 +118,5 @@ public class RoomSelectionManager implements CommandListener, MessageListener {
                 break;
         }
         return roomForm;
-    }
-
-    public void notifyIncomingMessage(final MessageConnection connection) {
-        SmsManager.notifyIncomingMessage(connection, display);
     }
 }

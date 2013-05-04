@@ -25,7 +25,72 @@ public class HttpManager {
     public static final String TURN_OFF_ACTION = "OFF";
     public static final String LIGHT_IS_ON = "ON";
 
-    private static String getDataFromServer(String url) throws IOException {
+    public void turnOnTheLight(final int selectedRoom,
+            final RegularRoomForm roomForm) {
+        Thread clientThread = new Thread() {
+            public void run() {
+                try {
+                    String dataFromServer = getDataFromServer(
+                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
+                            + selectedRoom + "&" + ACTION_PARAM + "=" + TURN_ON_ACTION);
+                    System.out.println("dataFromServer: " + dataFromServer);
+                    if (dataFromServer != null) {
+                        roomForm.turnOn();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        clientThread.start();
+    }
+
+    public void turnOffTheLight(final int selectedRoom,
+            final RegularRoomForm roomForm) {
+        Thread clientThread = new Thread() {
+            public void run() {
+                try {
+                    String dataFromServer = getDataFromServer(
+                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
+                            + selectedRoom + "&" + ACTION_PARAM + "=" + TURN_OFF_ACTION);
+                    System.out.println("dataFromServer: " + dataFromServer);
+                    if (dataFromServer != null) {
+                        roomForm.turnOff();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        clientThread.start();
+    }
+
+    public void launchRoomScreen(final int selectedRoom,
+            final RegularRoomForm roomForm, final Display display) {
+        Thread clientThread = new Thread() {
+            public void run() {
+                try {
+                    String dataFromServer = getDataFromServer(
+                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
+                            + selectedRoom + "&" + ACTION_PARAM + "=" + STATUS_ACTION);
+                    System.out.println("dataFromServer: " + dataFromServer);;
+                    final boolean isLightOn = LIGHT_IS_ON.equals(dataFromServer.trim());
+                    System.out.println("isLightOn: " + isLightOn);
+                    if (isLightOn) {
+                        roomForm.turnOn();
+                    } else {
+                        roomForm.turnOff();
+                    }
+                    display.setCurrent(roomForm);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        clientThread.start();
+    }
+
+    private String getDataFromServer(String url) throws IOException {
         String dataFromServer = null;
         HttpConnection connection = (HttpConnection) Connector.open(url);
         if (connection.getResponseCode() == HttpConnection.HTTP_OK) {
@@ -49,70 +114,5 @@ public class HttpManager {
             }
         }
         return dataFromServer;
-    }
-
-    public static void turnOnTheLight(final int selectedRoom,
-            final RegularRoomForm roomForm) {
-        Thread clientThread = new Thread() {
-            public void run() {
-                try {
-                    String dataFromServer = HttpManager.getDataFromServer(
-                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
-                            + selectedRoom + "&" + ACTION_PARAM + "=" + TURN_ON_ACTION);
-                    System.out.println("dataFromServer: " + dataFromServer);
-                    if (dataFromServer != null) {
-                        roomForm.turnOn();
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        };
-        clientThread.start();
-    }
-
-    public static void turnOffTheLight(final int selectedRoom,
-            final RegularRoomForm roomForm) {
-        Thread clientThread = new Thread() {
-            public void run() {
-                try {
-                    String dataFromServer = HttpManager.getDataFromServer(
-                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
-                            + selectedRoom + "&" + ACTION_PARAM + "=" + TURN_OFF_ACTION);
-                    System.out.println("dataFromServer: " + dataFromServer);
-                    if (dataFromServer != null) {
-                        roomForm.turnOff();
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        };
-        clientThread.start();
-    }
-
-    public static void launchRoomScreen(final int selectedRoom,
-            final RegularRoomForm roomForm, final Display display) {
-        Thread clientThread = new Thread() {
-            public void run() {
-                try {
-                    String dataFromServer = HttpManager.getDataFromServer(
-                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
-                            + selectedRoom + "&" + ACTION_PARAM + "=" + STATUS_ACTION);
-                    System.out.println("dataFromServer: " + dataFromServer);;
-                    final boolean isLightOn = LIGHT_IS_ON.equals(dataFromServer.trim());
-                    System.out.println("isLightOn: " + isLightOn);
-                    if (isLightOn) {
-                        roomForm.turnOn();
-                    } else {
-                        roomForm.turnOff();
-                    }
-                    display.setCurrent(roomForm);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        };
-        clientThread.start();
     }
 }
