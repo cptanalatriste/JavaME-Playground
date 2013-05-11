@@ -17,7 +17,7 @@ import pe.edu.pucp.teleprocesamiento.form.RoomCatalogForm;
 import pe.edu.pucp.teleprocesamiento.sms.SmsManager;
 
 /**
- * MIDlet for the Java ME Application.
+ * Main MIDlet for the Java ME Application.
  *
  * @author Carlos G. Gavidia
  */
