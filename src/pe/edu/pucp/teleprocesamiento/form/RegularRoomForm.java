@@ -39,7 +39,7 @@ public class RegularRoomForm extends Form {
         ImageItem imageItem = new ImageItem(null, lightbulbImageOff,
                 ImageItem.LAYOUT_CENTER,
                 "lightOff");
-        this.append(imageItem);
+        this.insert(LIGHT_IMAGE_INDEX, imageItem);
     }
 
     public final void turnLightOn() {
@@ -49,6 +49,6 @@ public class RegularRoomForm extends Form {
         ImageItem imageItem = new ImageItem(null, lightbulbImageOn,
                 ImageItem.LAYOUT_CENTER,
                 "lightOn");
-        this.append(imageItem);
+        this.insert(LIGHT_IMAGE_INDEX, imageItem);
     }
 }

@@ -20,16 +20,25 @@ public class LivingRoomForm extends RegularRoomForm {
 
     public LivingRoomForm(CommandListener commandListener) throws IOException {
         super(SCREEN_TITLE, commandListener);
-        wifiImageItem = new ImageItem(null, wifiImageOff,
+    }
+
+    public final void disableWifi() {
+        if (this.size() > 1) {
+            this.delete(WIFI_IMAGE_INDEX);
+        }
+        ImageItem imageItem = new ImageItem(null, wifiImageOff,
                 ImageItem.LAYOUT_CENTER,
                 "wifiOff");
-        this.append(wifiImageItem);
+        this.insert(WIFI_IMAGE_INDEX, imageItem);
     }
 
     public final void enableWifi() {
-        wifiImageItem = new ImageItem(null, wifiImageOn,
+        if (this.size() > 1) {
+            this.delete(WIFI_IMAGE_INDEX);
+        }
+        ImageItem imageItem = new ImageItem(null, wifiImageOn,
                 ImageItem.LAYOUT_CENTER,
                 "wifiOn");
-        this.insert(WIFI_IMAGE_INDEX, wifiImageItem);
+        this.insert(WIFI_IMAGE_INDEX, imageItem);
     }
 }

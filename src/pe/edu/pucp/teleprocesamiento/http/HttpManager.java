@@ -7,6 +7,7 @@ import java.io.InputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import javax.microedition.lcdui.Display;
+import pe.edu.pucp.teleprocesamiento.form.LivingRoomForm;
 import pe.edu.pucp.teleprocesamiento.form.RegularRoomForm;
 
 /**
@@ -81,6 +82,10 @@ public class HttpManager {
                         roomForm.turnLightOn();
                     } else {
                         roomForm.turnLightOff();
+                    }
+                    if (roomForm instanceof LivingRoomForm) {
+                        LivingRoomForm livingRoomForm = (LivingRoomForm) roomForm;
+                        livingRoomForm.disableWifi();
                     }
                     display.setCurrent(roomForm);
                 } catch (IOException ex) {
