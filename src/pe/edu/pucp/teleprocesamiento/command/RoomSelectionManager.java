@@ -1,6 +1,11 @@
 package pe.edu.pucp.teleprocesamiento.command;
 
 import java.io.IOException;
+import javax.bluetooth.BluetoothStateException;
+import javax.bluetooth.DeviceClass;
+import javax.bluetooth.DiscoveryListener;
+import javax.bluetooth.RemoteDevice;
+import javax.bluetooth.ServiceRecord;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.Command;
@@ -8,6 +13,7 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import pe.edu.pucp.teleprocesamiento.PlaygroundApp;
+import pe.edu.pucp.teleprocesamiento.bluetooth.BluetoothManager;
 import pe.edu.pucp.teleprocesamiento.form.LivingRoomForm;
 import pe.edu.pucp.teleprocesamiento.form.RegularRoomForm;
 import pe.edu.pucp.teleprocesamiento.form.RoomCatalogForm;
@@ -19,7 +25,7 @@ import pe.edu.pucp.teleprocesamiento.http.HttpManager;
  *
  * @author m523
  */
-public class RoomSelectionManager implements CommandListener {
+public class RoomSelectionManager implements CommandListener, DiscoveryListener {
 
     private static final int LIVINGROOM = 0;
     private static final int BEDROOM_1 = 1;
@@ -34,6 +40,7 @@ public class RoomSelectionManager implements CommandListener {
     private RegularRoomForm bedroom3Form = null;
     private RegularRoomForm bathroomForm = null;
     private HttpManager httpManager = null;
+    private BluetoothManager bluetoothManager = null;
 
     public RoomSelectionManager(RoomCatalogForm roomCatalogForm, Display display)
             throws IOException {
@@ -50,6 +57,7 @@ public class RoomSelectionManager implements CommandListener {
         this.bathroomForm = new RegularRoomForm("Baño",
                 RoomSelectionManager.this);
         httpManager = new HttpManager();
+        bluetoothManager = new BluetoothManager(this);
     }
 
     public void commandAction(Command command, Displayable displayable) {
@@ -115,8 +123,35 @@ public class RoomSelectionManager implements CommandListener {
                 break;
             case BATHROOM:
                 roomForm = bathroomForm;
+                startBluetoothServices();
                 break;
         }
         return roomForm;
+    }
+
+    public void startBluetoothServices() {
+        bluetoothManager.startDeviceSearch();
+    }
+
+    public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
+        try {
+            System.out.println("In deviceDiscovered");
+            String friendlyName = btDevice.getFriendlyName(false);
+            System.out.println("friendlyName: " + friendlyName);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void servicesDiscovered(int transID, ServiceRecord[] servRecord) {
+    }
+
+    public void serviceSearchCompleted(int transID, int respCode) {
+        System.out.println("In servicesDiscovered");
+        bluetoothManager.communicateWithServer(transID, respCode);
+    }
+
+    public void inquiryCompleted(int discType) {
+        System.out.println("In IninquiryCompleted \n");
     }
 }
