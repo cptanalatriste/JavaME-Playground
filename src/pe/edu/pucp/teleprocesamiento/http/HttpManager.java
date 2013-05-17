@@ -17,7 +17,7 @@ import pe.edu.pucp.teleprocesamiento.form.RegularRoomForm;
  */
 public class HttpManager {
 
-    private static final String SERVER_URL = "http://127.0.0.1:8000";
+    private static final String SERVER_URL = "http://127.0.0.1";
     public static final String ROOM_ID_PARAM = "roomId";
     public static final String ACTION_PARAM = "action";
     public static final String STATUS_ACTION = "STATUS";
