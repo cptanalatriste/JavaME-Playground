@@ -26,9 +26,9 @@ public class RegularRoomForm extends Form {
         this.setCommandListener(commandListener);
         this.addCommand(new Command(PlaygroundApp.BACK_COMMAND,
                 Command.ITEM, 1));
-        this.addCommand(new Command(PlaygroundApp.TURN_ON_COMMAND,
+        this.addCommand(new Command(PlaygroundApp.TURN_ON_LIGHT_COMMAND,
                 Command.ITEM, 1));
-        this.addCommand(new Command(PlaygroundApp.TURN_OFF_COMMAND,
+        this.addCommand(new Command(PlaygroundApp.TURN_OFF_LIGHT_COMMAND,
                 Command.ITEM, 1));
     }
 

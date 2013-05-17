@@ -34,7 +34,7 @@ public class RoomSelectionManager implements CommandListener, DiscoveryListener 
     private static final int BATHROOM = 4;
     private Display display = null;
     private final RoomCatalogForm roomCatalogForm;
-    private RegularRoomForm livingRoomForm = null;
+    private LivingRoomForm livingRoomForm = null;
     private RegularRoomForm bedroom1Form = null;
     private RegularRoomForm bedroom2Form = null;
     private RegularRoomForm bedroom3Form = null;
@@ -65,12 +65,16 @@ public class RoomSelectionManager implements CommandListener, DiscoveryListener 
         try {
             if (PlaygroundApp.ROOM_SELECTED_COMMAND.equals(commandLabel)) {
                 launchRoomScreen();
-            } else if (PlaygroundApp.TURN_ON_COMMAND.equals(commandLabel)) {
+            } else if (PlaygroundApp.TURN_ON_LIGHT_COMMAND.equals(commandLabel)) {
                 turnOnTheLight();
-            } else if (PlaygroundApp.TURN_OFF_COMMAND.equals(commandLabel)) {
+            } else if (PlaygroundApp.TURN_OFF_LIGHT_COMMAND.equals(commandLabel)) {
                 turnOffTheLight();
             } else if (PlaygroundApp.BACK_COMMAND.equals(commandLabel)) {
                 display.setCurrent(roomCatalogForm);
+            } else if (PlaygroundApp.ENABLE_WIFI_COMMAND.equals(commandLabel)) {
+                bluetoothManager.startDeviceSearch(BluetoothManager.ENABLE_COMMAND, livingRoomForm);
+            } else if (PlaygroundApp.DISABLE_WIFI_COMMAND.equals(commandLabel)) {
+                bluetoothManager.startDeviceSearch(BluetoothManager.DISABLE_COMMAND, livingRoomForm);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -101,9 +105,9 @@ public class RoomSelectionManager implements CommandListener, DiscoveryListener 
         final int selectedRoom = roomCatalogForm.getRoomsChoiceGroup().
                 getSelectedIndex();
         System.out.println("selectedRoom: " + selectedRoom);
+
         final RegularRoomForm roomForm = getRoomFromCode(selectedRoom);
         httpManager.launchRoomScreen(selectedRoom, roomForm, display);
-
     }
 
     private RegularRoomForm getRoomFromCode(int selectedRoom) {
@@ -123,25 +127,13 @@ public class RoomSelectionManager implements CommandListener, DiscoveryListener 
                 break;
             case BATHROOM:
                 roomForm = bathroomForm;
-                startBluetoothServices();
                 break;
         }
         return roomForm;
     }
 
-    public void startBluetoothServices() {
-        bluetoothManager.startDeviceSearch();
-    }
-
     public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
-        try {
-            System.out.println("In deviceDiscovered");
-            String friendlyName = btDevice.getFriendlyName(false);
-            System.out.println("friendlyName: " + friendlyName);
-            bluetoothManager.startServiceSearch(btDevice);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        bluetoothManager.startServiceSearch(btDevice);
     }
 
     public void servicesDiscovered(int transID, ServiceRecord[] servRecord) {
@@ -149,11 +141,9 @@ public class RoomSelectionManager implements CommandListener, DiscoveryListener 
     }
 
     public void serviceSearchCompleted(int transID, int respCode) {
-        System.out.println("In servicesDiscovered");
         bluetoothManager.communicateWithServer(transID, respCode);
     }
 
     public void inquiryCompleted(int discType) {
-        System.out.println("In IninquiryCompleted \n");
     }
 }

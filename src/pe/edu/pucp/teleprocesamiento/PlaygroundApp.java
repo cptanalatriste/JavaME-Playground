@@ -27,8 +27,10 @@ public class PlaygroundApp extends MIDlet implements CommandListener,
     public static final String NEXT_SCREEN_COMMAND = "Siguiente";
     public static final String ROOM_SELECTED_COMMAND = "Configurar";
     public static final String BACK_COMMAND = "Regresar";
-    public static final String TURN_ON_COMMAND = "Encender";
-    public static final String TURN_OFF_COMMAND = "Apagar";
+    public static final String TURN_ON_LIGHT_COMMAND = "Encender luz";
+    public static final String TURN_OFF_LIGHT_COMMAND = "Apagar luz";
+    public static final String ENABLE_WIFI_COMMAND = "Habilitar wi-fi";
+    public static final String DISABLE_WIFI_COMMAND = "Deshabilitar wifi";
     private SmsManager smsManager = null;
 
     public void startApp() {
