@@ -17,7 +17,8 @@ import pe.edu.pucp.teleprocesamiento.form.RegularRoomForm;
  */
 public class HttpManager {
 
-    private static final String SERVER_URL = "http://127.0.0.1";
+    private static final String SERVER_URL = "http://127.0.0.1:";
+    private static final String SERVER_PORT = "8000";
     public static final String ROOM_ID_PARAM = "roomId";
     public static final String ACTION_PARAM = "action";
     public static final String STATUS_ACTION = "STATUS";
@@ -31,7 +32,7 @@ public class HttpManager {
             public void run() {
                 try {
                     String dataFromServer = getDataFromServer(
-                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
+                            SERVER_URL + SERVER_PORT + "?" + ROOM_ID_PARAM + "="
                             + selectedRoom + "&" + ACTION_PARAM + "=" + TURN_ON_ACTION);
                     System.out.println("dataFromServer: " + dataFromServer);
                     if (dataFromServer != null) {
@@ -51,7 +52,7 @@ public class HttpManager {
             public void run() {
                 try {
                     String dataFromServer = getDataFromServer(
-                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
+                            SERVER_URL + SERVER_PORT + "?" + ROOM_ID_PARAM + "="
                             + selectedRoom + "&" + ACTION_PARAM + "=" + TURN_OFF_ACTION);
                     System.out.println("dataFromServer: " + dataFromServer);
                     if (dataFromServer != null) {
@@ -71,7 +72,7 @@ public class HttpManager {
             public void run() {
                 try {
                     String dataFromServer = getDataFromServer(
-                            SERVER_URL + "?" + ROOM_ID_PARAM + "="
+                            SERVER_URL + SERVER_PORT + "?" + ROOM_ID_PARAM + "="
                             + selectedRoom + "&" + ACTION_PARAM + "=" + STATUS_ACTION);
                     System.out.println("dataFromServer: " + dataFromServer);;
                     final boolean isLightOn = LIGHT_IS_ON.equals(dataFromServer.trim());

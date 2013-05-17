@@ -18,7 +18,7 @@ import javax.wireless.messaging.TextMessage;
  */
 public class SmsManager {
 
-    private static final String PORT = "1234";
+    private static final String SMS_PORT = "50000";
     private MessageConnection connection = null;
 
     public void startListening(final MessageListener listener)
@@ -28,7 +28,7 @@ public class SmsManager {
                 System.out.println("Starting startListening ...");
                 try {
                     connection =
-                            (MessageConnection) Connector.open("sms://:" + PORT);
+                            (MessageConnection) Connector.open("sms://:" + SMS_PORT);
                     connection.setMessageListener(listener);
                 } catch (IOException ex) {
                     ex.printStackTrace();
