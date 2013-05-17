@@ -16,6 +16,7 @@ import pe.edu.pucp.teleprocesamiento.PlaygroundApp;
  */
 public class RegularRoomForm extends Form {
 
+    public static final int LIGHT_IMAGE_INDEX = 0;
     private Image lightbulbImageOff = Image.createImage("/light_bulb_off.png");
     private Image lightbulbImageOn = Image.createImage("/light_bulb_on.png");
 
@@ -23,22 +24,29 @@ public class RegularRoomForm extends Form {
             throws IOException {
         super(title);
         this.setCommandListener(commandListener);
-        this.addCommand(new Command(PlaygroundApp.BACK_COMMAND, Command.ITEM, 1));
-        this.addCommand(new Command(PlaygroundApp.TURN_ON_COMMAND, Command.ITEM, 1));
-        this.addCommand(new Command(PlaygroundApp.TURN_OFF_COMMAND, Command.ITEM, 1));
+        this.addCommand(new Command(PlaygroundApp.BACK_COMMAND,
+                Command.ITEM, 1));
+        this.addCommand(new Command(PlaygroundApp.TURN_ON_COMMAND,
+                Command.ITEM, 1));
+        this.addCommand(new Command(PlaygroundApp.TURN_OFF_COMMAND,
+                Command.ITEM, 1));
     }
 
-    public final void turnOff() {
-        this.deleteAll();
-        ImageItem imageItem = new ImageItem(null, lightbulbImageOff, 
+    public final void turnLightOff() {
+        if (this.size() > 0) {
+            this.delete(LIGHT_IMAGE_INDEX);
+        }
+        ImageItem imageItem = new ImageItem(null, lightbulbImageOff,
                 ImageItem.LAYOUT_CENTER,
                 "lightOff");
         this.append(imageItem);
     }
 
-    public final void turnOn() {
-        this.deleteAll();
-        ImageItem imageItem = new ImageItem(null, lightbulbImageOn, 
+    public final void turnLightOn() {
+        if (this.size() > 0) {
+            this.delete(LIGHT_IMAGE_INDEX);
+        }
+        ImageItem imageItem = new ImageItem(null, lightbulbImageOn,
                 ImageItem.LAYOUT_CENTER,
                 "lightOn");
         this.append(imageItem);

@@ -138,12 +138,14 @@ public class RoomSelectionManager implements CommandListener, DiscoveryListener 
             System.out.println("In deviceDiscovered");
             String friendlyName = btDevice.getFriendlyName(false);
             System.out.println("friendlyName: " + friendlyName);
+            bluetoothManager.startServiceSearch(btDevice);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     public void servicesDiscovered(int transID, ServiceRecord[] servRecord) {
+        bluetoothManager.setConnectionURL(servRecord);
     }
 
     public void serviceSearchCompleted(int transID, int respCode) {

@@ -36,7 +36,7 @@ public class HttpManager {
                             + selectedRoom + "&" + ACTION_PARAM + "=" + TURN_ON_ACTION);
                     System.out.println("dataFromServer: " + dataFromServer);
                     if (dataFromServer != null) {
-                        roomForm.turnOn();
+                        roomForm.turnLightOn();
                     }
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -56,7 +56,7 @@ public class HttpManager {
                             + selectedRoom + "&" + ACTION_PARAM + "=" + TURN_OFF_ACTION);
                     System.out.println("dataFromServer: " + dataFromServer);
                     if (dataFromServer != null) {
-                        roomForm.turnOff();
+                        roomForm.turnLightOff();
                     }
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -78,9 +78,9 @@ public class HttpManager {
                     final boolean isLightOn = LIGHT_IS_ON.equals(dataFromServer.trim());
                     System.out.println("isLightOn: " + isLightOn);
                     if (isLightOn) {
-                        roomForm.turnOn();
+                        roomForm.turnLightOn();
                     } else {
-                        roomForm.turnOff();
+                        roomForm.turnLightOff();
                     }
                     display.setCurrent(roomForm);
                 } catch (IOException ex) {

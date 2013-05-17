@@ -1,6 +1,7 @@
 package pe.edu.pucp.teleprocesamiento.bluetooth;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.DiscoveryAgent;
 import javax.bluetooth.DiscoveryListener;
@@ -24,6 +25,7 @@ public class BluetoothManager {
     public static final String CLASS_IDENTIFIER = "11111111111111111111111111111111";
     private final DiscoveryAgent discoveryAgent;
     private final DiscoveryListener discoveryListener;
+    private String connectionURL;
 
     public BluetoothManager(DiscoveryListener discoveryListener)
             throws BluetoothStateException {
@@ -53,13 +55,30 @@ public class BluetoothManager {
     }
 
     public void communicateWithServer(int transID, int respCode) {
-        if (DiscoveryListener.SERVICE_SEARCH_COMPLETED == transID) {
+        System.out.println("respCode:" + respCode);
+
+        if (DiscoveryListener.SERVICE_SEARCH_COMPLETED == respCode) {
             try {
                 StreamConnection streamConnection =
-                        (StreamConnection) Connector.open(CLASS_IDENTIFIER);
+                        (StreamConnection) Connector.open(connectionURL);
+                OutputStream outputStream = streamConnection.openOutputStream();
+                System.out.println("Sending message ...");
+                String message = "Holitas \n";
+                outputStream.write(message.length());
+                outputStream.write(message.getBytes());
+                outputStream.flush();
+                outputStream.close();
+                System.out.println("Message sent ...");
+
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+        }
+    }
+
+    public void setConnectionURL(ServiceRecord[] servRecord) {
+        if (servRecord != null && servRecord.length > 0) {
+            this.connectionURL = servRecord[0].getConnectionURL(0, false);
         }
     }
 }
