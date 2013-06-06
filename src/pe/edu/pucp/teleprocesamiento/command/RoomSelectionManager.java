@@ -1,7 +1,6 @@
 package pe.edu.pucp.teleprocesamiento.command;
 
 import java.io.IOException;
-import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.DeviceClass;
 import javax.bluetooth.DiscoveryListener;
 import javax.bluetooth.RemoteDevice;
